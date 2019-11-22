@@ -3,7 +3,7 @@ import cv2
 import argparse
 
 from pathlib import Path
-from utils import load_video
+from utils import load_video, mkdir
 
 
 parser = argparse.ArgumentParser()
@@ -31,10 +31,6 @@ def extract_frames(in_dir, out_dir):
             cv2.imwrite(f'{str(frame_dir)}/frame_{count}.jpg', frame)
             has_frame, frame = cap.read()
             count += 1
-
-
-def mkdir(path):
-    Path(path).mkdir(parents=True, exist_ok=True)
 
 
 if __name__ == "__main__":

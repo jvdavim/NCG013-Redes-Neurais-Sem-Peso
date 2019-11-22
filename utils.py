@@ -2,6 +2,8 @@ import cv2
 import sys
 import os
 
+from pathlib import Path
+
 # -------------------------------------------------------------------
 # Parameters
 # -------------------------------------------------------------------
@@ -32,3 +34,7 @@ def load_video(video):
     else:
         print(f'[i] ==> Input file must be a video.')
     return cap
+
+
+def mkdir(path):
+    Path(path).mkdir(parents=True, exist_ok=True)
