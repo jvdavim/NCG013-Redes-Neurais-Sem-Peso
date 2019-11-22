@@ -12,14 +12,16 @@ CONF_THRESHOLD = 0.5
 NMS_THRESHOLD = 0.4
 IMG_WIDTH = 416
 IMG_HEIGHT = 416
+YOLO_CFG = './yolo/cfg/yolov3-face.cfg'
+YOLO_WEIGHTS = './yolo/yolo-weights/yolov3-wider_16000.weights'
 
 # -------------------------------------------------------------------
 # Help functions
 # -------------------------------------------------------------------
 
 
-def load_network(model_cfg, model_weights):
-    net = cv2.dnn.readNetFromDarknet(model_cfg, model_weights)
+def load_network():
+    net = cv2.dnn.readNetFromDarknet(YOLO_CFG, YOLO_WEIGHTS)
     net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
     net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
     return net

@@ -3,3 +3,5 @@ outputs/
 index.py
 .vscode/
 __pycache__/
+dados_proc*/
+yolo/
