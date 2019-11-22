@@ -1,8 +1,17 @@
 import os
 import cv2
+import argparse
 
 from pathlib import Path
 from utils import load_video
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--input', type=str, default='./videos',
+                    help='path to inputs directory')
+parser.add_argument('--output', type=str, default='./outputs',
+                    help='path to outputs directory')
+args = parser.parse_args()
 
 
 def extract_frames(in_dir, out_dir):
@@ -29,4 +38,5 @@ def mkdir(path):
 
 
 if __name__ == "__main__":
-    extract_frames('./data/videos/', './outputs')
+    extract_frames(args.input, args.output)
+    # './data/videos/', './outputs'
