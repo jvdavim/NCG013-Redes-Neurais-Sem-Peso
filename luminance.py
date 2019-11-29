@@ -34,7 +34,7 @@ def main(in_dir, out_dir):
         frame = get_luminance(frame)
         frame_dir = out_dir / Path(*Path(os.path.splitext(frame_path)[0]).parts[-4:-1])
         mkdir(frame_dir)
-        out_path= f'{str(frame_dir)}/{frame_path.name}'
+        out_path = str(frame_dir) + '/' + str(frame_path.name)
         cv2.imwrite(out_path, frame)
 
 

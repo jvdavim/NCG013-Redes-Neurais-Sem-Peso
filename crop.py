@@ -30,7 +30,7 @@ def main(in_dir, out_dir):
         mkdir(out_frame_dir)
         out_frame = get_face_frame(in_frame, net)
         in_frame_name = in_frame_path.name
-        cv2.imwrite(f'{str(out_frame_dir)}/{in_frame_name}', out_frame)
+        cv2.imwrite(str(out_frame_dir) + '/' + in_frame_name, out_frame)
 
 
 if __name__ == "__main__":

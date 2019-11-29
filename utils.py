@@ -30,11 +30,11 @@ def load_network():
 def load_video(video):
     if video:
         if not os.path.isfile(video):
-            print(f'[!] ==> Input video file {video} doesn\'t exist')
+            print('[!] ==> Input video file' + video + 'doesn\'t exist')
             sys.exit(1)
         cap = cv2.VideoCapture(str(video))
     else:
-        print(f'[i] ==> Input file must be a video.')
+        print('[i] ==> Input file must be a video.')
     return cap
 
 
