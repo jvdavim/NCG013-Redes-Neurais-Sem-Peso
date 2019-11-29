@@ -29,7 +29,7 @@ def load_network():
 
 def load_video(video):
     if video:
-        if not os.path.isfile(video):
+        if not video.is_file():
             print('[!] ==> Input video file' + video + 'doesn\'t exist')
             sys.exit(1)
         cap = cv2.VideoCapture(str(video))
