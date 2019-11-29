@@ -1,4 +1,3 @@
-import os
 import cv2
 import argparse
 
@@ -23,7 +22,7 @@ def main(in_dir, out_dir):
 
     for utt_path in in_dir.rglob('*.mp4'):
         cap = load_video(utt_path)
-        frame_dir = out_dir / Path(*Path(os.path.splitext(utt_path)[0]).parts[-3:])
+        frame_dir = out_dir / Path(*Path(utt_path.with_suffix('')).parts[-3:])
         mkdir(frame_dir)
         has_frame, frame = cap.read()
         count = 0

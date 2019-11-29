@@ -1,4 +1,3 @@
-import os
 import cv2
 import sys
 import argparse
@@ -24,12 +23,12 @@ def main(in_dir, out_dir):
 
     net = load_network()
 
-    for in_frame_path in in_dir.rglob('*.jpg'):
-        in_frame = cv2.imread(str(in_frame_path))
-        out_frame_dir = out_dir / Path(*Path(os.path.splitext(in_frame_path)[0]).parts[-4:-1])
+    for frame_path in in_dir.rglob('*.jpg'):
+        in_frame = cv2.imread(str(frame_path))
+        out_frame_dir = out_dir / Path(*Path(frame_path).parts[-4:-1])
         mkdir(out_frame_dir)
         out_frame = get_face_frame(in_frame, net)
-        in_frame_name = in_frame_path.name
+        in_frame_name = frame_path.name
         cv2.imwrite(str(out_frame_dir) + '/' + in_frame_name, out_frame)
 
 
