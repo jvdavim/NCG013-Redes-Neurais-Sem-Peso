@@ -28,7 +28,7 @@ def main(in_dir, out_dir):
         has_frame, frame = cap.read()
         count = 0
         while has_frame:
-            cv2.imwrite(f'{str(frame_dir)}/frame_{count}.jpg', frame)
+            cv2.imwrite(str(frame_dir) + '/' + 'frame_' + str(count) + '.jpg', frame)
             has_frame, frame = cap.read()
             count += 1
 
