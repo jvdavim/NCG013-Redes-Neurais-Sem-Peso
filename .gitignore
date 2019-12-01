@@ -5,3 +5,4 @@ index.py
 __pycache__/
 dados_proc*/
 yolo/yolo-weights/*.weights
+test/
