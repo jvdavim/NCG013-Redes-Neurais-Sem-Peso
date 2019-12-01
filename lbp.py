@@ -17,7 +17,8 @@ args = parser.parse_args()
 
 
 def lbp(frame):
-    return feature.local_binary_pattern(frame, 24, 8, method='uniform').flatten()
+    frame = feature.local_binary_pattern(frame, 24, 3, method='uniform')
+    return frame
 
 
 def main(in_dir, out_dir):
