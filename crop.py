@@ -29,7 +29,10 @@ def main(in_dir, out_dir):
         mkdir(out_frame_dir)
         out_frame = get_face_frame(in_frame, net)
         in_frame_name = frame_path.name
-        cv2.imwrite(str(out_frame_dir) + '/' + in_frame_name, out_frame)
+        try:
+            cv2.imwrite(str(out_frame_dir) + '/' + in_frame_name, out_frame)
+        except Exception:
+            cv2.imwrite(str(out_frame_dir) + '/' + in_frame_name, in_frame)
 
 
 if __name__ == "__main__":
