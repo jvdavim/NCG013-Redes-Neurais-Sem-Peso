@@ -27,12 +27,13 @@ def main(in_dir, out_dir):
     mkdir(out_dir)
 
     for frame_path in in_dir.rglob('*.jpg'):
-        frame = cv2.imread(str(frame_path))
-        frame = get_luminance(frame)
-        frame_dir = out_dir / Path(*Path(frame_path).parts[-4:-1])
-        mkdir(frame_dir)
-        out_path = str(frame_dir) + '/' + str(frame_path.name)
-        cv2.imwrite(out_path, frame)
+        if frame_path.parts[3] in ['0e02ee3c5_3', '0e4fe1878_1', '1add840e2_2', '1f61459b0', '20d669608_1']:
+            frame = cv2.imread(str(frame_path))
+            frame = get_luminance(frame)
+            frame_dir = out_dir / Path(*Path(frame_path).parts[-4:-1])
+            mkdir(frame_dir)
+            out_path = str(frame_dir) + '/' + str(frame_path.name)
+            cv2.imwrite(out_path, frame)
 
 
 if __name__ == '__main__':
