@@ -1,17 +1,15 @@
 import cv2
-import sys
 import argparse
-
 from pathlib import Path
-from utils import mkdir, load_network
-from yolo.face_detection import get_face_frame
 
+from src.lib.utils import mkdir, load_network
+from src.lib.yolo.face_detection import get_face_frame
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--input', type=str, default='./videos',
+parser.add_argument('--input', type=str, default='../data/frames',
                     help='path to inputs directory')
-parser.add_argument('--output', type=str, default='./outputs',
-                    help='path to outputs directory')
+parser.add_argument('--output', type=str, default='../data/dados_proc_1',
+                    help='path to frames directory')
 args = parser.parse_args()
 
 
@@ -31,7 +29,8 @@ def main(in_dir, out_dir):
         in_frame_name = frame_path.name
         try:
             cv2.imwrite(str(out_frame_dir) + '/' + in_frame_name, out_frame)
-        except Exception:
+        except Exception as e:
+            print(f'Nao foi possivel recortar a face para o frame {str(out_frame_dir)}/{in_frame_name}: {e}')
             cv2.imwrite(str(out_frame_dir) + '/' + in_frame_name, in_frame)
 
 

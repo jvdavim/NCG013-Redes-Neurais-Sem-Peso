@@ -1,24 +1,22 @@
 import cv2
-import sys
 import argparse
 import numpy as np
-
 from pathlib import Path
-from utils import mkdir
 
+from src.lib.utils import mkdir
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--input', type=str, default='./videos',
+parser.add_argument('--input', type=str, default='../data/dados_proc_1',
                     help='path to inputs directory')
-parser.add_argument('--output', type=str, default='./outputs',
-                    help='path to outputs directory')
+parser.add_argument('--output', type=str, default='../data/dados_proc_2',
+                    help='path to frames directory')
 args = parser.parse_args()
 
 
 def get_luminance(frame):
     # 0.2126*R + 0.7152*G + 0.0722*B
     w = np.array([[[0.0722, 0.7152, 0.2126]]])
-    luminance = cv2.convertScaleAbs(np.sum(frame*w, axis=2))
+    luminance = cv2.convertScaleAbs(np.sum(frame * w, axis=2))
     return luminance
 
 

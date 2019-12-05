@@ -1,15 +1,14 @@
 import cv2
 import argparse
-
 from pathlib import Path
-from utils import load_video, mkdir
 
+from src.lib.utils import load_video, mkdir
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--input', type=str, default='./videos',
+parser.add_argument('--input', type=str, default='../data/videos',
                     help='path to inputs directory')
-parser.add_argument('--output', type=str, default='./outputs',
-                    help='path to outputs directory')
+parser.add_argument('--output', type=str, default='../data/frames',
+                    help='path to frames directory')
 args = parser.parse_args()
 
 

@@ -1,8 +1,12 @@
+# Data
 data/
-outputs/
-index.py
+
+# IDE Config Files
 .vscode/
+.idea/
+
+# Python Cache
 __pycache__/
-dados_proc*/
-yolo/yolo-weights/*.weights
-test/
+
+# Yolo Model Weights
+src/lib/yolo/yolo-weights/*.weights

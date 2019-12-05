@@ -1,18 +1,16 @@
 import cv2
-import sys
 import argparse
-import numpy as np
-
 from skimage import feature
 from pathlib import Path
-from utils import mkdir
+
+from src.lib.utils import mkdir
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--input', type=str, default='./videos',
+parser.add_argument('--input', type=str, default='../data/dados_proc_2',
                     help='path to inputs directory')
-parser.add_argument('--output', type=str, default='./outputs',
-                    help='path to outputs directory')
+parser.add_argument('--output', type=str, default='../data/dados_proc_3',
+                    help='path to frames directory')
 args = parser.parse_args()
 
 

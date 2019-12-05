@@ -1,8 +1,5 @@
-import datetime
 import numpy as np
 import cv2
-import sys
-import os
 
 # -------------------------------------------------------------------
 # Parameters
@@ -12,6 +9,7 @@ CONF_THRESHOLD = 0.5
 NMS_THRESHOLD = 0.4
 IMG_WIDTH = 416
 IMG_HEIGHT = 416
+
 
 # -------------------------------------------------------------------
 # Help functions
@@ -25,7 +23,7 @@ def get_outputs_names(net: cv2.dnn_Net) -> list:
         net (cv2.dnn_Net): Network
 
     Returns:
-        [list]: Names of the output layers, i.e. the layers with unconnected outputs
+        [list]: Names of the output layers, i.e. the layers with unconnected frames
     """
     layers_names = net.getLayerNames()
     return [layers_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
@@ -108,25 +106,7 @@ def get_face_frame(frame, net):
     faces = get_face_boxes(frame, outs, CONF_THRESHOLD, NMS_THRESHOLD)
     for face in faces:
         xi = max(face[1], 0)
-        xf = min(face[1]+face[3], frame.shape[0])
+        xf = min(face[1] + face[3], frame.shape[0])
         yi = max(face[0], 0)
-        yf = min(face[0]+face[2], frame.shape[1])
-        return frame[xi:xf, yi:yf]
-
-
-def get_face_with_margin(frame, net, margin):
-    # Create a 4D blob from a frame.
-    blob = cv2.dnn.blobFromImage(frame, 1 / 255, (IMG_WIDTH, IMG_HEIGHT),
-                                 [0, 0, 0], 1, crop=False)
-    # Sets the input to the network
-    net.setInput(blob)
-    # Runs the forward pass to get output of the output layers
-    outs = net.forward(get_outputs_names(net))
-    # Remove the bounding boxes with low confidence and get face bounds
-    faces = get_face_boxes(frame, outs, CONF_THRESHOLD, NMS_THRESHOLD)
-    for face in faces:
-        xi = max(face[1]-margin, 0)
-        xf = min(face[1]+face[3]+margin, frame.shape[0])
-        yi = max(face[0]-margin, 0)
-        yf = min(face[0]+face[2]+margin, frame.shape[1])
+        yf = min(face[0] + face[2], frame.shape[1])
         return frame[xi:xf, yi:yf]
