@@ -1,6 +1,7 @@
-import cv2
 import argparse
 from pathlib import Path
+
+import cv2
 
 from src.lib.utils import load_video, mkdir
 

@@ -1,10 +1,10 @@
-import cv2
 import argparse
-from skimage import feature
 from pathlib import Path
 
-from src.lib.utils import mkdir
+import cv2
+from skimage import feature
 
+from src.lib.utils import mkdir
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', type=str, default='../data/dados_proc_2',
@@ -15,7 +15,7 @@ args = parser.parse_args()
 
 
 def lbp(frame):
-    frame = feature.local_binary_pattern(frame, 24, 3, method='uniform')
+    frame = feature.local_binary_pattern(frame, 24, 8, method='uniform')
     return frame
 
 
@@ -26,6 +26,7 @@ def main(in_dir, out_dir):
     mkdir(out_dir)
 
     for frame_path in in_dir.rglob('*.jpg'):
+        print(f'Processing frame {frame_path}')
         frame = cv2.imread(str(frame_path), 0)
         frame = lbp(frame)
         frame_dir = out_dir / Path(*Path(frame_path).parts[-4:-1])

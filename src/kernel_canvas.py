@@ -1,8 +1,9 @@
-import cv2
-import csv
 import argparse
-import wisardpkg as wsd
+import csv
 from pathlib import Path
+
+import cv2
+import wisardpkg as wsd
 
 from src.lib.utils import mkdir
 
@@ -11,19 +12,19 @@ parser.add_argument('--input', type=str, default='../data/dados_proc_3',
                     help='path to inputs directory')
 parser.add_argument('--output', type=str, default='../data/dataset',
                     help='path to frames directory')
-parser.add_argument('--csv', type=str, default='./data/omg_TrainVideos.csv',
+parser.add_argument('--csv', type=str, default='../data/omg_TrainVideos.csv',
                     help='path to frames directory')
 args = parser.parse_args()
 
 
 def apply_kernel_canvas(frame):
-    number_of_kernels = 1000
+    number_of_kernels = 100
     dimension = len(frame[0])
 
     kc = wsd.KernelCanvas(
         dimension,  # required
         number_of_kernels,  # required
-        bitsBykernel=3,  # optional
+        bitsBykernel=30,  # optional
         activationDegree=0.07,  # optional
         useDirection=False  # optional
     )
@@ -50,6 +51,7 @@ def main(in_dir, out_dir):
         for row in reader:
             # CAPTURAR DIRETORIO DOS FRAMES DA UTTERANCE ATUAL
             utt_dir = get_utt_dir(in_dir, row)
+            print(f'Processing utterance {utt_dir}')
             # CAPTURAR AROUSAL, VALENCE e EMOTIONMAXVOTE PARA UTTERANCE ATUAL
             arousal = row[5]
             valence = row[6]
@@ -62,9 +64,9 @@ def main(in_dir, out_dir):
                     arousal_ds.add(wsd.BinInput(x), arousal)
                     valence_ds.add(wsd.BinInput(x), valence)
                     emotion_ds.add(wsd.BinInput(x), emotion)
-    arousal_ds.save(str(out_dir / 'arousal_ds.wpkds'))
-    valence_ds.save(str(out_dir / 'valence_ds.wpkds'))
-    emotion_ds.save(str(out_dir / 'emotion_ds.wpkds'))
+    arousal_ds.save(str(out_dir / 'arousal_ds'))
+    valence_ds.save(str(out_dir / 'valence_ds'))
+    emotion_ds.save(str(out_dir / 'emotion_ds'))
 
 
 if __name__ == '__main__':

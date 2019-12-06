@@ -1,6 +1,7 @@
-import cv2
 import argparse
 from pathlib import Path
+
+import cv2
 
 from src.lib.utils import mkdir, load_network
 from src.lib.yolo.face_detection import get_face_frame

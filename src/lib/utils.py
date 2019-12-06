@@ -1,7 +1,7 @@
-import cv2
 import sys
-
 from pathlib import Path
+
+import cv2
 
 # -------------------------------------------------------------------
 # Parameters
@@ -13,6 +13,7 @@ IMG_WIDTH = 416
 IMG_HEIGHT = 416
 YOLO_CFG = './yolo/cfg/yolov3-face.cfg'
 YOLO_WEIGHTS = './yolo/yolo-weights/yolov3-wider_16000.weights'
+
 
 # -------------------------------------------------------------------
 # Help functions
