@@ -5,7 +5,7 @@ from pathlib import Path
 import cv2
 import wisardpkg as wsd
 
-from src.lib.utils import mkdir
+from lib.utils import mkdir
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', type=str, default='../data/dados_proc_3',

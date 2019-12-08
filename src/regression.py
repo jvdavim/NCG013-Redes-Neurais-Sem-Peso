@@ -5,11 +5,11 @@ from pathlib import Path
 import cv2
 import wisardpkg as wsd
 
-from src.kernel_canvas import apply_kernel_canvas
-from src.lbp import lbp
-from src.lib.utils import load_video, load_network
-from src.lib.yolo.face_detection import get_face_frame
-from src.luminance import get_luminance
+from kernel_canvas import apply_kernel_canvas
+from lbp import lbp
+from lib.utils import load_video, load_network
+from lib.yolo.face_detection import get_face_frame
+from luminance import get_luminance
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--arousal_ds', type=str, default='arousal_ds.wpkds')
@@ -28,7 +28,7 @@ def main(arousal_path, valence_path, test_csv, out_csv, videos_dir):
     arousal_train_ds = wsd.DataSet(str(arousal_path))
     valence_train_ds = wsd.DataSet(str(valence_path))
 
-    arousal_net = wsd.RegressionWisard(20)
+    arousal_net = wsd.RegressionWisard(10)
     arousal_net.train(arousal_train_ds)
 
     valence_net = wsd.RegressionWisard(20)

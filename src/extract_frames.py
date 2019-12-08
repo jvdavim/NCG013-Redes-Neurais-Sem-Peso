@@ -3,7 +3,7 @@ from pathlib import Path
 
 import cv2
 
-from src.lib.utils import load_video, mkdir
+from lib.utils import load_video, mkdir
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', type=str, default='../data/videos',

@@ -4,7 +4,7 @@ from pathlib import Path
 import cv2
 from skimage import feature
 
-from src.lib.utils import mkdir
+from lib.utils import mkdir
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', type=str, default='../data/dados_proc_2',

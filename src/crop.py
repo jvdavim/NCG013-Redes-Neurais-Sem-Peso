@@ -3,8 +3,8 @@ from pathlib import Path
 
 import cv2
 
-from src.lib.utils import mkdir, load_network
-from src.lib.yolo.face_detection import get_face_frame
+from lib.utils import mkdir, load_network
+from lib.yolo.face_detection import get_face_frame
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', type=str, default='../data/frames',
