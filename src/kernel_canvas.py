@@ -10,7 +10,7 @@ from lib.utils import mkdir
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', type=str, default='../data/dados_proc_3',
                     help='path to inputs directory')
-parser.add_argument('--output', type=str, default='./',
+parser.add_argument('--output', type=str, default='../data/dataset',
                     help='path to frames directory')
 parser.add_argument('--csv', type=str, default='../data/omg_TrainVideos.csv',
                     help='path to frames directory')
@@ -68,9 +68,9 @@ def main(in_dir, out_dir, csv_path):
                 arousal_ds.add(wsd.BinInput(x), arousal)
                 valence_ds.add(wsd.BinInput(x), valence)
                 emotion_ds.add(wsd.BinInput(x), emotion)
-    arousal_ds.save(str(out_dir / 'arousal_ds'))
-    valence_ds.save(str(out_dir / 'valence_ds'))
-    emotion_ds.save(str(out_dir / 'emotion_ds'))
+    arousal_ds.save(str(out_dir / 'arousal'))
+    valence_ds.save(str(out_dir / 'valence'))
+    emotion_ds.save(str(out_dir / 'emotion'))
 
 
 if __name__ == '__main__':

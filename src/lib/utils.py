@@ -11,13 +11,20 @@ CONF_THRESHOLD = 0.5
 NMS_THRESHOLD = 0.4
 IMG_WIDTH = 416
 IMG_HEIGHT = 416
-YOLO_CFG = './yolo/cfg/yolov3-face.cfg'
-YOLO_WEIGHTS = './yolo/yolo-weights/yolov3-wider_16000.weights'
+YOLO_CFG = './lib/yolo/cfg/yolov3-face.cfg'
+YOLO_WEIGHTS = './lib/yolo/yolo-weights/yolov3-wider_16000.weights'
 
 
 # -------------------------------------------------------------------
 # Help functions
 # -------------------------------------------------------------------
+
+def get_df_from_cache(input_csv, cache):
+    return
+
+
+def load_ds(ds):
+    return
 
 
 def load_network():

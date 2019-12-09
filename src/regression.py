@@ -1,5 +1,6 @@
 import argparse
 import csv
+import os
 from pathlib import Path
 
 import cv2
@@ -12,59 +13,76 @@ from lib.yolo.face_detection import get_face_frame
 from luminance import get_luminance
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--arousal_ds', type=str, default='arousal_ds.wpkds')
-parser.add_argument('--valence_ds', type=str, default='valence_ds.wpkds')
-parser.add_argument('--test_csv', type=str, default='../data/omg_TestVideos_WithLabels.csv')
-parser.add_argument('--out_csv', type=str, default='../data/omg_arousal_predictions.csv')
-parser.add_argument('--videos_dir', type=str, default='../data/videos/')
+parser.add_argument('--arousal', type=str, default='../data/dataset/arousal.wpkds')
+parser.add_argument('--valence', type=str, default='../data/dataset/valence.wpkds')
+parser.add_argument('--test', type=str, default='../data/omg_TestVideos_WithLabels_sample.csv')
+parser.add_argument('--out', type=str, default='../data/output.csv')
+parser.add_argument('--videos', type=str, default='../data/videos/')
 args = parser.parse_args()
 
 
-def main(arousal_path, valence_path, test_csv, out_csv, videos_dir):
-    test_csv = Path(test_csv)
-    out_csv = Path(out_csv)
-    videos_dir = Path(videos_dir)
+def main(arousal, valence, test, out, videos):
+    owd = os.getcwd()
 
-    arousal_train_ds = wsd.DataSet(str(arousal_path))
-    valence_train_ds = wsd.DataSet(str(valence_path))
+    # Carrega dataset com arousal
+    os.chdir(arousal.parent)
+    arousal_ds = wsd.DataSet(str(arousal.name))
+    os.chdir(owd)
 
-    arousal_net = wsd.RegressionWisard(10)
-    arousal_net.train(arousal_train_ds)
+    # Carrega dataset com valence
+    os.chdir(str(valence.parent))
+    valence_ds = wsd.DataSet(str(valence.name))
+    os.chdir(owd)
 
+    # Treina RegressionWisard para aruousal
+    arousal_net = wsd.RegressionWisard(20)
+    arousal_net.train(arousal_ds)
+
+    # Treina RegressionWisard para valence
     valence_net = wsd.RegressionWisard(20)
-    valence_net.train(valence_train_ds)
+    valence_net.train(valence_ds)
 
-    with open(test_csv, 'r', newline='\n') as f:
-        with open(out_csv, 'w', newline=',\n') as of:
+    os.chdir(test.parent)
+    with open(test.name, 'r', newline='\n') as f:
+        with open(out.name, 'w', newline='\n') as of:
             writer = csv.writer(of, delimiter=',')
             reader = csv.reader(f)
             next(reader)
+            os.chdir(owd)
             for row in reader:
-                test_ds = get_dataset(row, videos_dir)
-                arousal_predict = arousal_net.predict(test_ds)
-                valence_predict = valence_net.predict(test_ds)
-                video = row[3]
-                utterance = row[4]
-                writer.writerow([video, utterance, arousal_predict, valence_predict])
+                video_id = row[3]
+                utterance_id = row[4]
+                utterance = videos / video_id / 'video' / utterance_id
+                if utterance.is_file():
+                    test_ds = get_dataset(utterance)
+                    arousal_predict = arousal_net.predict(test_ds)
+                    valence_predict = valence_net.predict(test_ds)
+                    writer.writerow([video_id, utterance_id, arousal_predict, valence_predict])
+                    of.flush()
 
 
-def get_dataset(row, videos_dir):
+def get_dataset(utterance):
     #  Retorna dataset dado uma utterance (linha/row do csv de teste)
     ds = wsd.DataSet()
     net = load_network()
-    cap = load_video(str(videos_dir / row[3] / 'video' / row[4]))
+    cap = load_video(utterance)
     has_frame, frame = cap.read()
     frames = []
     while has_frame:
-        frame = get_face_frame(frame, net)
-        frame = cv2.resize(frame, dsize=(91, 124), interpolation=cv2.INTER_CUBIC)
-        frame = get_luminance(frame)
-        frame = lbp(frame)
-        frames += [frame.flatten()]
+        try:
+            frame = get_face_frame(frame, net)
+            frame = cv2.resize(frame, dsize=(91, 124), interpolation=cv2.INTER_CUBIC)
+            frame = get_luminance(frame)
+            frame = lbp(frame)
+            frames += [frame.flatten()]
+        except Exception as e:
+            print(f'Erro ao pre processar frame da utterance: {str(utterance)}')
+            print(e)
+        has_frame, frame = cap.read()
     x = apply_kernel_canvas(frames)
     ds.add(wsd.BinInput(x))
     return ds
 
 
 if __name__ == '__main__':
-    main(args.arousal_ds, args.valence_ds, args.test_csv, args.out_csv, args.videos_dir)
+    main(Path(args.arousal), Path(args.valence), Path(args.test), Path(args.out), Path(args.videos))
