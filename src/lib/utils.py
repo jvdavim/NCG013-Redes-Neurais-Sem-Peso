@@ -19,14 +19,6 @@ YOLO_WEIGHTS = './lib/yolo/yolo-weights/yolov3-wider_16000.weights'
 # Help functions
 # -------------------------------------------------------------------
 
-def get_df_from_cache(input_csv, cache):
-    return
-
-
-def load_ds(ds):
-    return
-
-
 def load_network():
     net = cv2.dnn.readNetFromDarknet(YOLO_CFG, YOLO_WEIGHTS)
     net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)

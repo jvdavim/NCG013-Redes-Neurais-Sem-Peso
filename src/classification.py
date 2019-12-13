@@ -13,53 +13,40 @@ from lib.yolo.face_detection import get_face_frame
 from luminance import get_luminance
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--arousal', type=str, default='../data/dataset/arousal.wpkds')
-parser.add_argument('--valence', type=str, default='../data/dataset/valence.wpkds')
+parser.add_argument('--emotion', type=str, default='../data/dataset/emotion.wpkds')
 parser.add_argument('--test', type=str, default='../data/omg_ValidationVideos.csv')
-parser.add_argument('--out', type=str, default='../data/model_output.csv')
+parser.add_argument('--out', type=str, default='../data/emotion_output.csv')
 parser.add_argument('--videos', type=str, default='../data/videos/')
 args = parser.parse_args()
 
 
-def main(arousal, valence, test, out, videos):
+def main(emotion, test, out, videos):
     owd = os.getcwd()
 
-    # Carrega dataset com arousal
-    os.chdir(arousal.parent)
-    arousal_ds = wsd.DataSet(str(arousal.name))
+    # Carrega dataset com emotion
+    os.chdir(emotion.parent)
+    emotion_ds = wsd.DataSet(str(emotion.name))
     os.chdir(owd)
 
-    # Carrega dataset com valence
-    os.chdir(str(valence.parent))
-    valence_ds = wsd.DataSet(str(valence.name))
-    os.chdir(owd)
+    # Treina Wisard para emotion
+    emotion_net = wsd.Wisard(20)
+    emotion_net.train(emotion_ds)
 
-    # Treina RegressionWisard para aruousal
-    arousal_net = wsd.RegressionWisard(20)
-    arousal_net.train(arousal_ds)
-
-    # Treina RegressionWisard para valence
-    valence_net = wsd.RegressionWisard(20)
-    valence_net.train(valence_ds)
-
-    os.chdir(test.parent)
-    with open(test.name, 'r', newline='\n') as f:
-        with open(out.name, 'w', newline='\n') as of:
+    with open(test, 'r', newline='\n') as f:
+        with open(out, 'w', newline='\n') as of:
             writer = csv.writer(of, delimiter=',')
-            writer.writerow(['video', 'utterance', 'arousal', 'valence'])
+            writer.writerow(['video', 'utterance', 'emotion'])
             of.flush()
             reader = csv.reader(f)
             next(reader)
-            os.chdir(owd)
             for row in reader:
                 video_id = row[3]
                 utterance_id = row[4]
                 utterance = videos / video_id / 'video' / utterance_id
                 if utterance.is_file():
                     test_ds = get_dataset(utterance)
-                    arousal_predict = arousal_net.predict(test_ds)[0]
-                    valence_predict = valence_net.predict(test_ds)[0]
-                    writer.writerow([video_id, utterance_id, arousal_predict, valence_predict])
+                    emotion_predict = emotion_net.predict(test_ds)[0]
+                    writer.writerow([video_id, utterance_id, emotion_predict])
                     of.flush()
 
 
@@ -90,4 +77,4 @@ def get_dataset(utterance):
 
 
 if __name__ == '__main__':
-    main(Path(args.arousal), Path(args.valence), Path(args.test), Path(args.out), Path(args.videos))
+    main(Path(args.emotion), Path(args.test), Path(args.out), Path(args.videos))
