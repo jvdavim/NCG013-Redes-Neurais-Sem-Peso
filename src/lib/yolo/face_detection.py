@@ -1,5 +1,5 @@
-import numpy as np
 import cv2
+import numpy as np
 
 # -------------------------------------------------------------------
 # Parameters
@@ -69,12 +69,7 @@ def get_face_boxes(frame: np.ndarray, outs: list, conf_threshold: float, nms_thr
     for i in indices:
         i = i[0]
         box = boxes[i]
-        left = box[0]
-        top = box[1]
-        width = box[2]
-        height = box[3]
         final_boxes.append(box)
-        left, top, right, bottom = refined_box(left, top, width, height)
     return final_boxes
 
 
@@ -92,21 +87,3 @@ def refined_box(left, top, width, height):
     right = right + margin
 
     return left, top, right, bottom
-
-
-def get_face_frame(frame, net):
-    # Create a 4D blob from a frame.
-    blob = cv2.dnn.blobFromImage(frame, 1 / 255, (IMG_WIDTH, IMG_HEIGHT),
-                                 [0, 0, 0], 1, crop=False)
-    # Sets the input to the network
-    net.setInput(blob)
-    # Runs the forward pass to get output of the output layers
-    outs = net.forward(get_outputs_names(net))
-    # Remove the bounding boxes with low confidence and get face bounds
-    faces = get_face_boxes(frame, outs, CONF_THRESHOLD, NMS_THRESHOLD)
-    for face in faces:
-        xi = max(face[1], 0)
-        xf = min(face[1] + face[3], frame.shape[0])
-        yi = max(face[0], 0)
-        yf = min(face[0] + face[2], frame.shape[1])
-        return frame[xi:xf, yi:yf]

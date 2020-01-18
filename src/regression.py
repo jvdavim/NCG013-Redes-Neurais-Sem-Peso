@@ -6,11 +6,11 @@ from pathlib import Path
 import cv2
 import wisardpkg as wsd
 
-from kernel_canvas import apply_kernel_canvas
-from lbp import lbp
-from lib.utils import load_video, load_network
-from lib.yolo.face_detection import get_face_frame
-from luminance import get_luminance
+from src.kernel_canvas import apply_kernel_canvas
+from src.lbp import lbp
+from src.lib.utils import load_yolonet, load_video
+from src.lib.yolo.face_detection import get_face_frame
+from src.luminance import get_luminance
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--arousal', type=str, default='../data/dataset/arousal.wpkds')
@@ -66,7 +66,7 @@ def main(arousal, valence, test, out, videos):
 def get_dataset(utterance):
     #  Retorna dataset dado uma utterance (linha/row do csv de teste)
     ds = wsd.DataSet()
-    net = load_network()
+    net = load_yolonet()
     cap = load_video(utterance)
     has_frame, frame = cap.read()
     frames = []
@@ -78,10 +78,10 @@ def get_dataset(utterance):
             frame = get_luminance(frame)
             frame = lbp(frame)
             frames += [frame.flatten()]
-            print(f'Video: {utterance.parts[3]} \t Utterance: {utterance.name} \t Frame: {count}')
+            print(f'[!] ==> Video: {utterance.parts[3]} \t Utterance: {utterance.name} \t Frame: {count}')
             count += 1
         except Exception as e:
-            print(f'Erro ao pre processar frame {count} da utterance: {utterance.name}')
+            print(f'[!] ==> Erro ao pre processar frame {count} da utterance: {utterance.name}')
             print(e)
         has_frame, frame = cap.read()
     x = apply_kernel_canvas(frames)
