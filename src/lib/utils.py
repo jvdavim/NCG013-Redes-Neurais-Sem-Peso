@@ -1,3 +1,4 @@
+import os
 import sys
 from pathlib import Path
 
@@ -15,8 +16,8 @@ CONF_THRESHOLD = 0.5
 NMS_THRESHOLD = 0.4
 IMG_WIDTH = 416
 IMG_HEIGHT = 416
-YOLO_CFG = './lib/yolo/cfg/yolov3-face.cfg'
-YOLO_WEIGHTS = './lib/yolo/yolo-weights/yolov3-wider_16000.weights'
+YOLO_CFG = str(Path(os.getcwd()) / Path('lib/yolo/cfg/yolov3-face.cfg'))
+YOLO_WEIGHTS = str(Path(os.getcwd()) / Path('lib/yolo/yolo-weights/yolov3-wider_16000.weights'))
 
 
 # -------------------------------------------------------------------
@@ -40,7 +41,7 @@ def load_wsd(arousal_json, valence_json, emotion_json, param):
     else:
         emotion_net = wsd.Wisard(param)
     net.append(emotion_net)
-    return net
+    return tuple(net)
 
 
 def pre_process(utterance):
@@ -76,7 +77,7 @@ def load_yolonet():
 def load_video(video):
     if video:
         if not video.is_file():
-            print('[!] ==> Input video file' + video + 'doesn\'t exist')
+            print('[!] ==> Input video file' + str(video) + 'doesn\'t exist')
             sys.exit(1)
         cap = cv2.VideoCapture(str(video))
     else:
@@ -127,6 +128,11 @@ def apply_kernel_canvas(frames):
         useDirection=False  # optional
     )
     return kc.transform(frames)
+
+
+def string2json(string, json):
+    with open(json, "w") as file:
+        file.write(string)
 
 
 def mkdir(path):
