@@ -27,17 +27,20 @@ YOLO_WEIGHTS = str(Path(os.getcwd()) / Path('lib/yolo/yolo-weights/yolov3-wider_
 def load_wsd(arousal_json, valence_json, emotion_json, param):
     net = list()
     if arousal_json.is_file():
-        arousal_net = wsd.RegressionWisard(arousal_json)
+        with open(arousal_json) as file:
+            arousal_net = wsd.RegressionWisard(file.read())
     else:
         arousal_net = wsd.RegressionWisard(param)
     net.append(arousal_net)
     if valence_json.is_file():
-        valence_net = wsd.RegressionWisard(valence_json)
+        with open(valence_json) as file:
+            valence_net = wsd.RegressionWisard(file.read())
     else:
         valence_net = wsd.RegressionWisard(param)
     net.append(valence_net)
     if emotion_json.is_file():
-        emotion_net = wsd.Wisard(emotion_json)
+        with open(emotion_json) as file:
+            emotion_net = wsd.Wisard(file.read())
     else:
         emotion_net = wsd.Wisard(param)
     net.append(emotion_net)

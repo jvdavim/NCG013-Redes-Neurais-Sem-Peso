@@ -6,20 +6,20 @@ from pathlib import Path
 import pandas as pd
 import wisardpkg as wsd
 
-from src.lib.utils import load_wsd, pre_process, mkdir, string2json
+from src.lib.utils import load_wsd, pre_process, string2json
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--videos', type=str, default='../data/videos',
                     help='Diretório com videos organizados conforme na challange')
 parser.add_argument('--train', type=str, default='../data/omg_TrainVideos.csv',
                     help='Caminho do arquivo csv para treino')
-parser.add_argument('--arousal_net', type=str, default='./tmp/arousal_net.json',
+parser.add_argument('--arousal_net', type=str, default='../tmp/arousal_net.json',
                     help='Caminho do arquivo json da rede treinada para a label arousal')
-parser.add_argument('--valence_net', type=str, default='./tmp/valence_net.json',
+parser.add_argument('--valence_net', type=str, default='../tmp/valence_net.json',
                     help='Caminho do arquivo json da rede treinada para a label valence')
-parser.add_argument('--emotion_net', type=str, default='./tmp/emotion_net.json',
+parser.add_argument('--emotion_net', type=str, default='../tmp/emotion_net.json',
                     help='Caminho do arquivo json da rede treinada para a label emotion')
-parser.add_argument('--index', type=str, default='./tmp/index.csv',
+parser.add_argument('--index', type=str, default='../tmp/index.csv',
                     help='Caminho do arquivo que armazena registros já treinados')
 args = parser.parse_args()
 
@@ -47,12 +47,11 @@ if index_csv.is_file():
     valence_net = net[1]
     emotion_net = net[2]
     df = full_df[~full_df.isin(index_df).all(axis=1)]
-    print(f'[!] ==> Iniciando treinamento com estado recuperado')
+    print(f'[!] ==> Estado recuperado com suceusso')
 else:
     df = full_df
-    if not Path('tmp').is_dir():
-        mkdir(Path('tmp'))
     print(f'[!] ==> Iniciando treinamento do zero')
+del full_df, args, parser, train_csv
 ############################################
 
 with open(index_csv, 'a') as index_file:
