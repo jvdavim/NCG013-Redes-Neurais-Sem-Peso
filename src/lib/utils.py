@@ -47,6 +47,22 @@ def load_wsd(arousal_json, valence_json, emotion_json, param):
     return tuple(net)
 
 
+def crop(utterance):
+    net = load_yolonet()
+    cap = load_video(utterance)
+    has_frame, frame = cap.read()
+    count = 0
+    while has_frame:
+        try:
+            frame = crop_face(frame, net)
+            return frame
+        except Exception as e:
+            print(f'[!] ==> Erro ao pre processar frame {count} da utterance: {utterance.name}')
+            print(f'[E] ==> {e}')
+            return frame
+        has_frame, frame = cap.read()
+
+
 def pre_process(utterance):
     net = load_yolonet()
     cap = load_video(utterance)
