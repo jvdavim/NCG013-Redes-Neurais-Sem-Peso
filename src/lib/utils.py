@@ -156,3 +156,9 @@ def string2json(string, json):
 
 def mkdir(path):
     Path(path).mkdir(parents=True, exist_ok=True)
+
+
+def diff(full_df, partial_df, columns):
+    df1 = full_df.loc[:, columns]
+    df2 = partial_df.loc[:, columns]
+    return full_df.iloc[df1[~df1.apply(tuple, 1).isin(df2.apply(tuple, 1))].index, :]

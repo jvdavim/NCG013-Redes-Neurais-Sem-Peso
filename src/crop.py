@@ -6,7 +6,7 @@ from pathlib import Path
 import cv2
 import pandas as pd
 
-from src.lib.utils import mkdir, load_yolonet, load_video, crop_face
+from src.lib.utils import mkdir, load_yolonet, load_video, crop_face, diff
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data', type=str, default='../data/videos',
@@ -33,10 +33,8 @@ else:
     print(f'[!] ==> Arquivo de treino nao encontrado')
     sys.exit(1)
 if index_csv.is_file():
-    index_df = pd.read_csv(index_csv, sep=',',
-                           names=['link', 'start', 'end', 'video', 'utterance', 'arousal', 'valence',
-                                  'EmotionMaxVote'])
-    df = full_df[~full_df.isin(index_df).all(axis=1)]
+    index_df = pd.read_csv(index_csv, sep=',', names=['video', 'utterance'])
+    df = diff(full_df, index_df, ['video', 'utterance'])
     print(f'[!] ==> Estado recuperado com suceusso')
 else:
     df = full_df
@@ -57,12 +55,12 @@ with open(index_csv, 'a') as index_file:
         while has_frame:
             try:
                 frame = crop_face(frame, net)
-                cv2.imwrite(str(out_dir / Path(f'frame{count}.png')), frame)
+                cv2.imwrite(str(out_dir / Path(f'frame{count}.jpg')), frame)
                 print(f'[!] ==> Video: {utterance.parts[3]} \t Utterance: {utterance.name} \t Frame: {count}')
                 count += 1
             except Exception as e:
                 print(f'[!] ==> Erro ao pre processar frame {count} da utterance: {utterance.name}')
                 print(f'[E] ==> {e}')
             has_frame, frame = cap.read()
-        index_writer.writerow(row)
+        index_writer.writerow(row[3:5])
         index_file.flush()
