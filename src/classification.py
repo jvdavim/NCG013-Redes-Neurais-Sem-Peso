@@ -5,7 +5,7 @@ from pathlib import Path
 
 import wisardpkg as wsd
 
-from src.lib.utils import pre_process
+from lib.utils import pre_process
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--emotion', type=str, default='../data/dataset/emotion.wpkds')

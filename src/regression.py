@@ -6,11 +6,11 @@ from pathlib import Path
 import cv2
 import wisardpkg as wsd
 
-from src.kernel_canvas import apply_kernel_canvas
-from src.lbp import lbp
-from src.lib.utils import load_yolonet, load_video
-from src.lib.yolo.face_detection import get_face_frame
-from src.luminance import get_luminance
+from kernel_canvas import apply_kernel_canvas
+from lbp import lbp
+from lib.utils import load_yolonet, load_video
+from lib.yolo.face_detection import get_face_frame
+from luminance import get_luminance
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--arousal', type=str, default='../data/dataset/arousal.wpkds')

@@ -10,7 +10,7 @@ import wisardpkg as wsd
 # ------------------------------------------------------------------
 from skimage import feature
 
-from src.lib.yolo.face_detection import get_outputs_names, get_face_boxes
+from lib.yolo.face_detection import get_outputs_names, get_face_boxes
 
 CONF_THRESHOLD = 0.5
 NMS_THRESHOLD = 0.4

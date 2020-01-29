@@ -6,7 +6,7 @@ from pathlib import Path
 import pandas as pd
 import wisardpkg as wsd
 
-from src.lib.utils import load_wsd, pre_process
+from lib.utils import load_wsd, pre_process
 
 # parser = argparse.ArgumentParser()
 # parser.add_argument('--videos', type=str, default='../data/videos',
