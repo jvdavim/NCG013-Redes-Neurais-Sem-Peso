@@ -6,7 +6,7 @@ from pathlib import Path
 import cv2
 import pandas as pd
 
-from src.lib.utils import mkdir, load_yolonet, load_video, crop_face, diff
+from lib.utils import mkdir, load_yolonet, load_video, crop_face, diff
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--videos', type=str, default='../data/videos',
