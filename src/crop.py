@@ -9,7 +9,7 @@ import pandas as pd
 from src.lib.utils import mkdir, load_yolonet, load_video, crop_face, diff
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data', type=str, default='../data/videos',
+parser.add_argument('--videos', type=str, default='../data/videos',
                     help='Diretório com videos organizados conforme na challange')
 parser.add_argument('--output', type=str, default='../output/videos',
                     help='Diretório com frames com as faces recortadas')
@@ -19,7 +19,7 @@ parser.add_argument('--index', type=str, default='../tmp/crop_index.csv',
                     help='Caminho do arquivo que armazena registros já treinados')
 args = parser.parse_args()
 
-videos_dir = Path(args.data)
+videos_dir = Path(args.videos)
 output = Path(args.output)
 train_csv = Path(args.train)
 index_csv = Path(args.index)
