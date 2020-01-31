@@ -1,6 +1,7 @@
 # Data
 data/
 output/
+tmp/
 
 # IDE Config Files
 .vscode/
