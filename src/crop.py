@@ -13,7 +13,7 @@ parser.add_argument('--videos', type=str, default='../data/videos',
                     help='Diretório com videos organizados conforme na challange')
 parser.add_argument('--output', type=str, default='../output/videos',
                     help='Diretório com frames com as faces recortadas')
-parser.add_argument('--train', type=str, default='../data/omg_TrainVideos.csv',
+parser.add_argument('--metadata', type=str, default='../data/omg_TrainVideos.csv',
                     help='Caminho do arquivo csv para treino')
 parser.add_argument('--index', type=str, default='../tmp/crop_index.csv',
                     help='Caminho do arquivo que armazena registros já treinados')
@@ -25,7 +25,7 @@ train_csv = Path(args.train)
 index_csv = Path(args.index)
 
 ############################################
-# RECUPERA ESTADO ONDE PAROU O TREINAMENTO #
+#        RECUPERA ESTADO ONDE PAROU        #
 ############################################
 if train_csv.is_file():
     full_df = pd.read_csv(train_csv, sep=',')
