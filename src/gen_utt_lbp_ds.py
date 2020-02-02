@@ -3,6 +3,7 @@ import glob
 from pathlib import Path
 
 import cv2
+import numpy as np
 import pandas as pd
 import wisardpkg as wsd
 
@@ -49,22 +50,22 @@ v_ds = wsd.DataSet()
 for i, row in df.iterrows():
     img_dir = Path(data) / Path(row[3]) / Path('video') / Path(row[4]).with_suffix('')
     img_paths = glob.glob(str(img_dir / Path('*.jpg')))
-    img_set = []
+    img_set = np.array([], np.uint8)
     for img_path in img_paths:
         if Path(img_path).stat().st_size:
             img = cv2.imread(img_path)
             pipeline = LocalBinaryPatternPipeline(img, P, R, METHOD)
             img = pipeline.transform()  # executa o pre processamento
-            img_set += img.flatten()  # concatena todas as imagens em uma so
+            img_set = np.concatenate((img_set, img), axis=None)  # concatena todas as imagens em uma so
     if len(img_set) > 0:
         kc = wsd.KernelCanvas(
-            len(img_set[0]),  # required
+            len(img_set),  # required
             NUMBER_OF_KERNELS,  # required
             bitsBykernel=30,  # optional
             activationDegree=0.07,  # optional
             useDirection=False  # optional
         )
-        x = kc.transform(img_set)
+        x = kc.transform([img_set])
         e_ds.add(wsd.BinInput(x), str(int(row[7])))
         a_ds.add(wsd.BinInput(x), row[5])
         v_ds.add(wsd.BinInput(x), row[6])

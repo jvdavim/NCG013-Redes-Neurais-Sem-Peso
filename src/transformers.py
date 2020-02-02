@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 
 from skimage import feature
+from skimage.filters import threshold_sauvola, threshold_otsu, apply_hysteresis_threshold
 
 
 class Pipeline:
@@ -32,3 +33,61 @@ class LocalBinaryPatternPipeline(Pipeline):
     def _lbp(self):
         data = feature.local_binary_pattern(self.data, self.p, self.r, method=self.method)
         self.data = data
+
+
+class SauvolaPipeline(Pipeline):
+    def __init__(self, data):
+        super().__init__(data)
+
+    def transform(self):
+        self._luminance()
+        self._sauvola()
+        self._resize()
+        return self.data
+
+    def _sauvola(self):
+        self.data = self.data > threshold_sauvola(self.data)
+
+
+class OtsuPipeline(Pipeline):
+    def __init__(self, data):
+        super().__init__(data)
+
+    def transform(self):
+        self._luminance()
+        self._otsu()
+        self._resize()
+        return self.data
+
+    def _otsu(self):
+        self.data = self.data > threshold_otsu(self.data)
+
+
+class CannyPipeline(Pipeline):
+    def __init__(self, data, low, high):
+        super().__init__(data)
+        self.low = low
+        self.high = high
+
+    def transform(self):
+        self._luminance()
+        self._canny()
+        self._resize()
+        return self.data
+
+    def _canny(self):
+        self.data = apply_hysteresis_threshold(self.data, self.low, self.high)
+
+
+class AdaptiveGaussianPipeline(Pipeline):
+    def __init__(self, data):
+        super().__init__(data)
+
+    def transform(self):
+        self._luminance()
+        self._adaptive_gaussian()
+        self._resize()
+        return self.data
+
+    def _adaptive_gaussian(self):
+        self.data = cv2.adaptiveThreshold(self.data, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
