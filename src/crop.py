@@ -35,7 +35,7 @@ else:
 if index.is_file():
     index_df = pd.read_csv(index, sep=',', names=['video', 'utterance'])
     df = diff(full_df, index_df, ['video', 'utterance'])
-    print(f'[!] ==> Estado recuperado com suceusso')
+    print(f'[!] ==> Estado recuperado com sucesso')
 else:
     df = full_df
     print(f'[!] ==> Iniciando processamento do zero')
@@ -47,20 +47,21 @@ with open(index, 'a') as index_file:
     for i, row in df.iterrows():
         utterance = videos_dir / Path(row[3]) / Path('video') / Path(row[4])
         out_dir = output_dir / Path(row[3]) / Path('video') / Path(row[4]).with_suffix('')
-        mkdir(out_dir)
-        net = load_yolonet()
-        cap = load_video(utterance)
-        has_frame, frame = cap.read()
-        count = 0
-        while has_frame:
-            try:
-                frame = crop_face(frame, net)
-                cv2.imwrite(str(out_dir / Path(f'frame{count}.jpg')), frame)
-                print(f'[!] ==> Video: {utterance.parts[3]} \t Utterance: {utterance.name} \t Frame: {count}')
-                count += 1
-            except Exception as e:
-                print(f'[!] ==> Erro ao pre processar frame {count} da utterance: {utterance.name}')
-                print(f'[E] ==> {e}')
+        if utterance.is_file():
+            mkdir(out_dir)
+            net = load_yolonet()
+            cap = load_video(utterance)
             has_frame, frame = cap.read()
+            count = 0
+            while has_frame:
+                try:
+                    frame = crop_face(frame, net)
+                    cv2.imwrite(str(out_dir / Path(f'frame{count}.jpg')), frame)
+                    print(f'[!] ==> Video: {utterance.parts[3]} \t Utterance: {utterance.name} \t Frame: {count}')
+                    count += 1
+                except Exception as e:
+                    print(f'[!] ==> Erro ao pre processar frame {count} da utterance: {utterance.name}')
+                    print(f'[E] ==> {e}')
+                has_frame, frame = cap.read()
         index_writer.writerow(row[3:5])
         index_file.flush()
