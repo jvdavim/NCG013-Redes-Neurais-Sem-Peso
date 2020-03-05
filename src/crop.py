@@ -57,7 +57,7 @@ with open(index, 'a') as index_file:
                 try:
                     frame = crop_face(frame, net)
                     cv2.imwrite(str(out_dir / Path(f'frame{count}.jpg')), frame)
-                    print(f'[!] ==> Video: {utterance.parts[3]} \t Utterance: {utterance.name} \t Frame: {count}')
+                    print(f'[!] ==> Video: {row[3]} \t Utterance: {row[4]} \t Frame: {count}')
                     count += 1
                 except Exception as e:
                     print(f'[!] ==> Erro ao pre processar frame {count} da utterance: {utterance.name}')
